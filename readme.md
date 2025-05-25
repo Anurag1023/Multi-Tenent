@@ -38,7 +38,7 @@ A full-stack multi-tenant web application with user roles (admin, manager, membe
 4. **Set up MongoDB connection in the `.env` file.**
 5. **Run the backend server:**
    ```sh
-   npm run dev
+   nodemon server.js
    ```
 
 ---
@@ -53,12 +53,7 @@ A full-stack multi-tenant web application with user roles (admin, manager, membe
    ```sh
    npm install
    ```
-3. **Create a `.env` file based on the `.env.example`:**
-   ```sh
-   cp .env.example .env
-   ```
-4. **Set up API URL in the `.env` file.**
-5. **Run the frontend server:**
+3. **Run the frontend server:**
    ```sh
    npm run dev
    ```
@@ -67,7 +62,7 @@ A full-stack multi-tenant web application with user roles (admin, manager, membe
 
 ## Usage
 
-- Access the application at `http://localhost:3000`
+- Access the application at `http://localhost:5173`
 - Register as a new user or log in with existing credentials
 - Admin users can manage organizations, roles, and tasks
 - Managers and Members can manage tasks within their organization
