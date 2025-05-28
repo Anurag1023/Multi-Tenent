@@ -330,7 +330,6 @@ const Dashboard = () => {
                   <th className="px-4 font-semibold text-blue-900">Priority</th>
                   <th className="px-4 font-semibold text-blue-900">Due Date</th>
                   <th className="px-4 font-semibold text-blue-900">Category</th>
-                  {user?.role === "member" && <th className="px-4 font-semibold text-blue-900">Update Status</th>}
                   {user?.role === "admin" && <th className="px-4 font-semibold text-blue-900">Delete</th>}
                 </tr>
               </thead>
@@ -360,21 +359,45 @@ const Dashboard = () => {
                           : ""}
                       </td>
                       <td className="px-4">
-                        <select
-                          value={statusUpdate[task._id] || task.status}
-                          onChange={(e) => handleStatusChange(task._id, e.target.value)}
-                          className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring focus:border-blue-400 bg-white"
-                        >
-                          <option value="todo">To Do</option>
-                          <option value="in-progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                        </select>
-                        <button
-                          onClick={() => handleUpdateStatus(task._id)}
-                          className="ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
-                        >
-                          Update
-                        </button>
+                        {/* Only allow status update if:
+                              - admin/manager: always
+                              - member: only if assigned to them
+                        */}
+                        {(user?.role === "admin" ||
+                          user?.role === "manager" ||
+                          (user?.role === "member" &&
+                            Array.isArray(task.assignedTo) &&
+                            task.assignedTo.some(
+                              (u) => (u && (u._id === user.id || u === user.id))
+                            ))) && (
+                          <div className="flex items-center">
+                            <select
+                              value={statusUpdate[task._id] || task.status}
+                              onChange={(e) => handleStatusChange(task._id, e.target.value)}
+                              className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring focus:border-blue-400 bg-white"
+                            >
+                              <option value="todo">To Do</option>
+                              <option value="in-progress">In Progress</option>
+                              <option value="completed">Completed</option>
+                            </select>
+                            <button
+                              onClick={() => handleUpdateStatus(task._id)}
+                              className="ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                            >
+                              Update
+                            </button>
+                          </div>
+                        )}
+                        {/* Otherwise, just show status text */}
+                        {(user?.role === "member" &&
+                          (!Array.isArray(task.assignedTo) ||
+                            !task.assignedTo.some(
+                              (u) => (u && (u._id === user.id || u === user.id))
+                            ))) && (
+                          <span className="px-2 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-700 ml-2">
+                            {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4">
                         <span
@@ -395,33 +418,6 @@ const Dashboard = () => {
                           : ""}
                       </td>
                       <td className="px-4 capitalize">{task.category}</td>
-                      {/* Member: Only update status for own tasks */}
-                      {user?.role === "member" &&
-                        Array.isArray(task.assignedTo) &&
-                        task.assignedTo.some(
-                          (u) => (u && (u._id === user.id || u === user.id))
-                        ) && (
-                          <td className="px-4">
-                            <select
-                              value={statusUpdate[task._id] || task.status}
-                              onChange={(e) =>
-                                handleStatusChange(task._id, e.target.value)
-                              }
-                              className="px-2 py-1 border border-blue-300 rounded focus:outline-none focus:ring focus:border-blue-400 bg-white"
-                            >
-                              <option value="todo">To Do</option>
-                              <option value="in-progress">In Progress</option>
-                              <option value="completed">Completed</option>
-                            </select>
-                            <button
-                              onClick={() => handleUpdateStatus(task._id)}
-                              className="ml-2 px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
-                            >
-                              Update
-                            </button>
-                          </td>
-                        )}
-                      {/* Admin: Delete task button */}
                       {user?.role === "admin" && (
                         <td className="px-4">
                           <button

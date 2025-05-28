@@ -16,7 +16,7 @@ const HomePage = () => (
           to="/dashboard"
           className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded shadow hover:from-blue-700 hover:to-purple-700 transition"
         >
-          Login
+          Org-Login
         </Link>
         <Link
           to="/orgRegister"
