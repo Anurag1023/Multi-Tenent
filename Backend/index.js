@@ -37,11 +37,12 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/organizations', organizationRoutes);
 
+connectDB();
+
 app.get('/', (req, res) => {
   res.send('Welcome to the Backend Server!');
 });
 
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + "http://localhost:" + PORT);
-  connectDB();
 });
