@@ -39,6 +39,7 @@ app.use('/api/organizations', organizationRoutes);
 
 async function connected() {
   try {
+    console.log("connecting to MongoDB...");
     await connectDB();
   } catch (error) {
     console.error("MongoDB connection error:", error);
