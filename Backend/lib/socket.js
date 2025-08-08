@@ -6,10 +6,4 @@ const app = express();
 
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: ["https://multi-tenent-omega.vercel.app/"],
-  },
-});
-
-export { io, app, server };
+export { app, server };
