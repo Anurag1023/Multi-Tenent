@@ -37,7 +37,15 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/organizations', organizationRoutes);
 
-connectDB();
+async function connected() {
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+  }
+}
+
+connected();
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Backend Server!');
